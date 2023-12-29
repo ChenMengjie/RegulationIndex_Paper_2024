@@ -117,12 +117,16 @@ ggsave(paste0("scRNAseq_CD34_all_kprop_NB.pdf"), plot = wave_one, width = 12, he
 ########################
 ########## UMap ########
 ########################
+
+
 final_colors <- final_cluster
 final_colors[final_cluster == 2] <- "#CC8D1A"
 final_colors[final_cluster == 3] <- "#8CBEB2"
 final_colors[final_cluster == 4] <- "#F06060"
-#load("/Users/mchen12/Downloads/more_Inflation_analysis/zheng_data/CD34.rds")
-#plot(dimred[, 2], dimred[, 1], xlim = c(-8, 10), ylim = c(-5, 4), pch=20, col = final_colors)
+
+
+library(umap)
+dimred <- umap::umap(X)$layout
 
 pdf(paste0("umap_CD34.pdf"), width= 4, height = 4)
 plot(dimred[, 2], dimred[, 1], xlim = c(-8, 10), ylim = c(-5, 4), pch=20, col = final_colors)
