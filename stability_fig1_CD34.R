@@ -87,16 +87,19 @@ waveplot_fig1_override <- function(one.cluster.zscore.summary, show_mean_cutoff 
 }
 
 
-load("CD34.rds")
-counts <- counts[, -which(duplicated(colnames(counts)))]
+
+
 ##############################
 ########## Wave plots ########
 ##############################
+library(RegulationIndex)
 
+load(CD34)
+counts <- CD34$counts
+final_cluster <- CD34$final_cluster
 
-library(RegulationZIndex)
 testdata <- t(counts)
-cluster.zscore.summary <- NB_inflation_test_var_asymp(testdata, grouping = final_cluster, min.depth.group = 500, cell.depth.ranges = c(500, 10000), genemean.cutoff = 0.5)
+cluster.zscore.summary <- Kprop_inflation_test(testdata, grouping = final_cluster, min.depth.group = 500, cell.depth.ranges = c(500, 10000), genemean.cutoff = 0.5)
 
 wave_one <- waveplot_fig1_override(cluster.zscore.summary[[1]], show_mean_cutoff = 0.5, xmax = 10, add_poisson_line = TRUE, dot_color = "#CC8D1A")
 ggsave(paste0("cRNAseq_CD34_group1_kprop_NB.pdf"), plot = wave_one, width = 12, height = 3)
@@ -108,7 +111,7 @@ wave_one <- waveplot_fig1_override(cluster.zscore.summary[[3]], show_mean_cutoff
 ggsave(paste0("scRNAseq_CD34_group3_kprop_NB.pdf"), plot = wave_one, width = 12, height = 3)
 
 
-cluster.zscore.summary2 <- NB_inflation_test_var_asymp(testdata, min.depth.group = 500, cell.depth.ranges = c(500, 10000), genemean.cutoff = 0.5)
+cluster.zscore.summary2 <- Kprop_inflation_test(testdata, min.depth.group = 500, cell.depth.ranges = c(500, 10000), genemean.cutoff = 0.5)
 wave_one <- waveplot_fig1_override(cluster.zscore.summary2, show_mean_cutoff = 0.5, xmax = 10, add_poisson_line = TRUE, dot_color = "#5C4B51")
 ggsave(paste0("scRNAseq_CD34_all_kprop_NB.pdf"), plot = wave_one, width = 12, height = 3)
 
@@ -126,7 +129,7 @@ final_colors[final_cluster == 4] <- "#F06060"
 
 
 library(umap)
-dimred <- umap::umap(X)$layout
+dimred <- umap::umap(counts)$layout
 
 pdf(paste0("umap_CD34.pdf"), width= 4, height = 4)
 plot(dimred[, 2], dimred[, 1], xlim = c(-8, 10), ylim = c(-5, 4), pch=20, col = final_colors)
@@ -202,7 +205,7 @@ counts <- counts[, -which(duplicated(colnames(counts)))]
 
 library(RegulationZIndex)
 testdata <- t(counts)
-cluster.zscore.summary <- NB_inflation_test_var_asymp(testdata, grouping = final_cluster, min.depth.group = 500, cell.depth.ranges = c(500, 10000), genemean.cutoff = 0.5)
+cluster.zscore.summary <- Kprop_inflation_test(testdata, grouping = final_cluster, min.depth.group = 500, cell.depth.ranges = c(500, 10000), genemean.cutoff = 0.5)
 
 wave1 <- waveplot_fig1_override(cluster.zscore.summary[[1]], show_mean_cutoff = 0.5, xmax = 10, add_poisson_line = TRUE, dot_color = "#CC8D1A")
 
@@ -210,7 +213,7 @@ wave2 <- waveplot_fig1_override(cluster.zscore.summary[[2]], show_mean_cutoff = 
 
 wave3 <- waveplot_fig1_override(cluster.zscore.summary[[3]], show_mean_cutoff = 0.5, xmax = 10, add_poisson_line = TRUE, dot_color = "#F06060")
 
-cluster.zscore.summary2 <- NB_inflation_test_var_asymp(testdata, min.depth.group = 500, cell.depth.ranges = c(500, 10000), genemean.cutoff = 0.5)
+cluster.zscore.summary2 <- Kprop_inflation_test(testdata, min.depth.group = 500, cell.depth.ranges = c(500, 10000), genemean.cutoff = 0.5)
 wave_one <- waveplot_fig1_override(cluster.zscore.summary2, show_mean_cutoff = 0.5, xmax = 10, add_poisson_line = TRUE, dot_color = "#5C4B51")
 
 library(easyGgplot2)
@@ -223,9 +226,9 @@ dev.off()
 
 
 
-library(RegulationZIndex)
+
 testdata <- t(counts)
-cluster.zscore.summary <- NB_inflation_test_var_asymp(testdata, grouping = final_cluster, min.depth.group = 500, cell.depth.ranges = c(500, 10000), genemean.cutoff = 0.5)
+cluster.zscore.summary <- Kprop_inflation_test(testdata, grouping = final_cluster, min.depth.group = 500, cell.depth.ranges = c(500, 10000), genemean.cutoff = 0.5)
 
 wave1 <- waveplot_fig1_override(cluster.zscore.summary[[1]], show_mean_cutoff = 0.5, xmax = 10, add_poisson_line = TRUE, dot_color = "#CC8D1A")
 
@@ -233,7 +236,7 @@ wave2 <- waveplot_fig1_override(cluster.zscore.summary[[2]], show_mean_cutoff = 
 
 wave3 <- waveplot_fig1_override(cluster.zscore.summary[[3]], show_mean_cutoff = 0.5, xmax = 10, add_poisson_line = TRUE, dot_color = "#F06060")
 
-cluster.zscore.summary2 <- NB_inflation_test_var_asymp(testdata, min.depth.group = 500, cell.depth.ranges = c(500, 10000), genemean.cutoff = 0.5)
+cluster.zscore.summary2 <- Kprop_inflation_test(testdata, min.depth.group = 500, cell.depth.ranges = c(500, 10000), genemean.cutoff = 0.5)
 wave_one <- waveplot_fig1_override(cluster.zscore.summary2, show_mean_cutoff = 0.5, show_top = 120, xmax = 10, add_poisson_line = TRUE, dot_color = "#5C4B51")
 
 library(easyGgplot2)
